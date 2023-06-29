@@ -1,10 +1,12 @@
 package com.github.kodsurfer.mq;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 public class BrokerServer implements Runnable {
 
-    public static final int PORT = 9999;
+    public static final int SOCKET_PORT = 9999;
     private final Socket socket;
 
     public BrokerServer(Socket socket) {
@@ -14,5 +16,13 @@ public class BrokerServer implements Runnable {
     @Override
     public void run() {
 
+    }
+
+    public static void main(String[] args) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(SOCKET_PORT);
+        while (true) {
+            BrokerServer brokerServer = new BrokerServer(serverSocket.accept());
+            new Thread(brokerServer).start();
+        }
     }
 }
